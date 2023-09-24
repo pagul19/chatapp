@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einfacher Userchat</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <h1>Einfacher Userchat</h1>
+  <div id="chat">
+    <div id="user-list">
+      <h2>Benutzerliste</h2>
+      <button id="change-username-button">Benutzernamen ändern</button>
+      <ul id="users"></ul>
+    </div>
+    <div id="chat-window">
+      <div id="chat-messages"></div>
+    </div>
+    <div id="chat-interaction">
+      <input type="text" id="message-input" placeholder="Nachricht eingeben" />
+      <button id="send-button">Senden</button>
+    </div>
+  </div>
+
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const username = prompt("Geben Sie Ihren Benutzernamen ein:");
+    socket.emit('setUsername', username);
+
+    // Funktion zum Aktualisieren der Benutzerliste auf der HTML-Seite
+    const updateUserListUI = (usernames) => {
+      const userList = document.getElementById('users');
+      userList.innerHTML = ''; // Lösche alle vorhandenen Benutzernamen
+
+      usernames.forEach((user) => {
+        const userItem = document.createElement('li');
+        userItem.textContent = user;
+        userList.appendChild(userItem);
+      });
+    };
+
+    socket.on('userList', (usernames) => {
+      // Aktualisiere die Benutzerliste auf der HTML-Seite
+      updateUserListUI(usernames);
+    });
+
+    // Funktion zum Anzeigen der Chat-Historie
+    const displayChatHistory = (chatHistory) => {
+      const chatMessages = document.getElementById('chat-messages');
+      chatMessages.innerHTML = ''; // Lösche alle vorhandenen Nachrichten
+
+      chatHistory.forEach((data) => {
+        const message = document.createElement('div');
+        message.textContent = `${data.username}: ${data.message}`;
+        chatMessages.appendChild(message);
+      });
+    };
+
+    socket.on('chatHistory', (chatHistory) => {
+      // Anzeige der Chat-Historie beim Verbinden
+      displayChatHistory(chatHistory);
+    });
+
+    const chatMessages = document.getElementById('chat-messages');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+
+    sendButton.addEventListener('click', () => {
+      const message = messageInput.value.trim();
+      if (message) {
+        socket.emit('chatMessage', message);
+        messageInput.value = '';
+      }
+    });
+
+    socket.on('chatMessage', (data) => {
+      const chatMessages = document.getElementById('chat-messages');
+      const isScrolledToBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 1;
+
+      const message = document.createElement('div');
+      message.textContent = `${data.username}: ${data.message}`;
+      chatMessages.appendChild(message);
+
+      // Scrolle das Chat-Fenster nach unten, wenn es bereits ganz unten ist
+      if (isScrolledToBottom) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    });
+
+    const changeUsernameButton = document.getElementById('change-username-button');
+
+    changeUsernameButton.addEventListener('click', () => {
+        const newUsername = prompt("Geben Sie Ihren neuen Benutzernamen ein:");
+        if (newUsername) {
+            socket.emit('changeUsername', newUsername);
+        }
+    });
+  </script>
+</body>
+</html>

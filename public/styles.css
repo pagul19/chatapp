@@ -1,0 +1,63 @@
+/* Allgemeine Stilanpassungen für das gesamte Dokument */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center; /* Zentriere den Text horizontal */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Container für die gesamte Chat-Anwendung */
+  #chat {
+    display: flex;
+    justify-content: center; /* Zentriere den Inhalt horizontal */
+    align-items: flex-start; /* Oberen Rand ausrichten */
+    height: 100vh; /* 100% der Bildschirmhöhe */
+    background-color: #5867ac; /* Hintergrundfarbe ändern */
+  }
+  
+  /* Stil für die Benutzerliste */
+  #user-list {
+    flex: 1; /* Benutzerliste nimmt den verfügbaren Platz ein */
+    max-width: 450px;
+    width: 300px;
+    max-height: 450px;
+    overflow-y: auto; /* Scrollleiste anzeigen, wenn die Benutzerliste zu hoch wird */
+    text-align: left; /* Links ausrichten */
+    padding: 10px;
+    background-color: #95dd73;
+  }
+  
+  /* Stil für das Chat-Fenster */
+  #chat-window {
+    flex: 2; /* Chat-Fenster nimmt den verfügbaren Platz ein */
+    width: 300px;
+    max-width: 600px;
+    max-height: 90%;
+    overflow-y: auto; /* Scrollleiste anzeigen, wenn der Chat zu hoch wird */
+    padding: 10px;
+    position: relative;
+    background-color: #a075b9;
+  }
+  #chat-interaction {
+    position: absolute; /* Positioniere das chat-interaction-Div absolut */
+    bottom: 0; /* Platziere es am unteren Rand des chat-window-Divs */
+    padding: 10px;
+    display: flex;
+    justify-content: center; /* Elemente horizontal verteilen */
+  }
+  
+  /* Stil für die Chat-Nachrichten */
+  #chat-messages {
+    /* Hier kannst du weitere Stilanpassungen für die Chat-Nachrichten vornehmen */
+  }
+  #message-input {
+    width: 600px;
+  }
+  
+  /* Stil für die Eingabe und Schaltflächen */
+  #message-input,
+  #send-button,
+  #change-username-button {
+    margin-top: 10px;
+  }
+  
