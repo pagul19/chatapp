@@ -6,7 +6,10 @@ const Redis = require('ioredis');
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-const redisClient = new Redis(); // Verbindung zu Redis herstellen
+const redisClient = new Redis({
+  host: 'redis',
+  port: 6379,
+}); // Verbindung zu Redis herstellen
 
 app.use(express.static(__dirname + '/public'));
 
