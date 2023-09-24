@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:alpine
+    restart: always
+  chatapp:
+    image: pagul19/chatapp:latest
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
